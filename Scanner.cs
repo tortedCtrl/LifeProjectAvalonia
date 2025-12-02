@@ -53,7 +53,8 @@ public class Scanner : IDisposable
 
                 Revive(aliveCells!);
 
-                //if (pattern.Stable) _terrain.StablePatternEncountered(aliveCells!);
+                if (pattern.Stable) 
+                    _terrain.StablePatternEncountered(aliveCells!);
 
                 return;
             }

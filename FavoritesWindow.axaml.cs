@@ -36,7 +36,7 @@ public partial class FavoritesWindow : Window
     {
         foreach (Cell cell in field)
         {
-            _presenter.cells[cell.X, cell.Y].Fill = cell.Brush();
+            _presenter.cells[cell.X, cell.Y].Fill = cell.BrushToPaintCell();
         }
     }
 }

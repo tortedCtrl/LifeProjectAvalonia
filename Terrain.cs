@@ -10,7 +10,7 @@ public class Terrain
 
     public CellField Field { get; init; }
 
-    //private List<Colony> colonies = new();
+    private List<CellColony> colonies = new();
 
     public Terrain(int width, int height)
     {
@@ -19,16 +19,15 @@ public class Terrain
 
     public void Iterate()
     {
+        UniteAllColonies();
+
         foreach (Cell cell in Field)
             cell.CalculateNextState();
 
         foreach (Cell cell in Field)
             cell.ToNextState();
 
-        //UniteAll();
-
-        /*foreach (Colony colony in colonies)
-            colony.TryMove();*/
+        colonies.ForEach(colony => colony.TryMove());
 
         TurnFinished?.Invoke(Field);
     }
@@ -42,46 +41,39 @@ public class Terrain
         TurnFinished?.Invoke(Field);
     }
 
-    /*public void StablePatternEncountered(List<Cell> stablePattern)
+    public void StablePatternEncountered(List<Cell> stablePattern)
     {
-        Colony born = new Colony(stablePattern, Field);
+        CellColony born = new CellColony(stablePattern, Field);
 
         colonies.Add(born);
     }
-    private void UniteAll()
+
+    private void UniteAllColonies()
     {
         bool uniting = true;
         while (uniting)
         {
             uniting = false;
-            foreach (Colony colony in colonies)
+            foreach (CellColony colony in colonies)
             {
-                Cell? common = colony.NeighbourColonyCell();
-                if (common != null)
+                (bool found, Cell? common) = colony.CellInNeighbourColony();
+                if (found)
                 {
-                    Colony neighbour = GetColony(common);
-                    //if (neighbour == null) continue;
-                    Unite(colony, neighbour);
+                    Unite(colony, common!.Colony);
                     uniting = true;
                     break;
                 }
             }
         }
     }
-    private void Unite(Colony A, Colony B)
+    private void Unite(CellColony? A, CellColony? B)
     {
+        if (A == null || B == null) return;
+
         colonies.Add(A + B);
 
         colonies.Remove(A);
         colonies.Remove(B);
     }
-    private Colony GetColony(Cell member)
-    {
-        Colony? found = colonies.FirstOrDefault(colony => colony.Members.Contains(member));
-
-        if (found == null) throw new NullReferenceException($"No Colony with {member} in");
-
-        return found;
-    }*/
 }
 

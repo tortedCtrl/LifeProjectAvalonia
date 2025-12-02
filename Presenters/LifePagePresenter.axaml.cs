@@ -29,7 +29,7 @@ public partial class LifePagePresenter : UserControl
     {
         foreach (Cell cell in field)
         {
-            _presenter.cells[cell.X, cell.Y].Fill = cell.Brush();
+            _presenter.cells[cell.X, cell.Y].Fill = cell.BrushToPaintCell();
         }
     }
 

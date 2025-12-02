@@ -8,8 +8,8 @@ namespace LifeProjectAvalonia;
 
 public class GameController
 {
-    public Terrain _terrain; //public --> interface
-    //private Scanner _scanner;
+    public Terrain terrain; //public --> interface
+    public Scanner scanner;
 
     private bool _started = false;
     private int _timeDelay = 600;
@@ -21,8 +21,8 @@ public class GameController
         if (_width < 1 || _height < 1) throw new ArgumentException("Width or Height <= 0");
 
         TimeDelay = timeDelay;
-        _terrain = new Terrain(_width, _height);
-        //_scanner = new Scanner(_terrain);
+        terrain = new Terrain(_width, _height);
+        scanner = new Scanner(terrain);
     }
 
     public void ToggleGame()
@@ -41,7 +41,7 @@ public class GameController
         while (true)
         {
             if (_pause == false)
-                _terrain.Iterate();
+                terrain.Iterate();
 
             await Task.Delay(TimeDelay);
         }

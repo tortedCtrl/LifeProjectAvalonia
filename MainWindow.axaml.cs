@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using System.Runtime.CompilerServices;
 
 namespace LifeProjectAvalonia;
 
@@ -9,7 +10,16 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
+
+        Height = 900;
+        Width = 900;
+
+        Position = new Avalonia.PixelPoint(50, 50);
+
+
         StartButton.Click += StartButton_Click;
+
+        
     }
 
     private void StartButton_Click(object? sender, RoutedEventArgs e)
@@ -21,12 +31,13 @@ public partial class MainWindow : Window
 
         var controller = new GameController(width, height, timeDelay);
 
-        Content = new LifePagePresenter(controller, width, height);
+        this.Content = new LifePagePresenter(controller, width, height, 900 / width);
 
-        Width = 1000;
-        Height = 1000;
-        
+        Window favorites = new FavoritesWindow(controller.scanner, width, height, 900 / width);
+        favorites.Show();
 
-        if (randomize) controller._terrain.Randomize();
+        Closing += (_, _) => favorites.Close();
+
+        if (randomize) controller.terrain.Randomize();
     }
 }

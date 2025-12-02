@@ -5,8 +5,8 @@
         mc:Ignorable="d"
         x:Class="LifeProjectAvalonia.MainWindow"
         Title="Game of Life"
-        Width="400"
-        Height="500">
+        Width="900"
+        Height="900">
 
 	<DockPanel Margin="10">
 

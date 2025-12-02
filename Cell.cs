@@ -52,7 +52,7 @@ public class Cell
     public void ToBlack() => State = new Black();
     //public void ToBlack(Colony colony) => State = new Black(colony);
 
-    public SolidColorBrush Brush() => State.Brush();
+    public IImmutableSolidColorBrush Brush() => State.Brush();
 
     public bool CanMove((int x, int y) dir)
     {
@@ -72,7 +72,7 @@ public class Cell
 public interface CellState
 {
     public CellState NextState(List<Cell> nbors, int blackNear, int whiteNear);
-    public SolidColorBrush Brush();
+    public IImmutableSolidColorBrush Brush();
     //public Colony? ItsColony { get => null; }
 
 }
@@ -86,7 +86,7 @@ public struct Dead : CellState
         return new Dead();
     }
 
-    public SolidColorBrush Brush() => new SolidColorBrush(Colors.Gray);
+    public IImmutableSolidColorBrush Brush() => Brushes.LightGray;
 }
 public struct White : CellState
 {
@@ -104,7 +104,7 @@ public struct White : CellState
         return new Dead();
     }
 
-    public SolidColorBrush Brush() => new SolidColorBrush(Colors.White);
+    public IImmutableSolidColorBrush Brush() => Brushes.White;
 }
 public struct Black : CellState
 {
@@ -133,7 +133,7 @@ public struct Black : CellState
         return new Dead();
     }
 
-    public SolidColorBrush Brush() => new SolidColorBrush(Colors.Black);
+    public IImmutableSolidColorBrush Brush() => Brushes.Black;
 }
 public struct Border : CellState
 {
@@ -142,7 +142,7 @@ public struct Border : CellState
         return new Border();
     }
 
-    public SolidColorBrush Brush() => new SolidColorBrush(Colors.Brown);
+    public IImmutableSolidColorBrush Brush() => Brushes.Brown;
 }
 
 #endregion

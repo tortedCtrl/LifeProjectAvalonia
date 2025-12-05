@@ -50,7 +50,7 @@ public class CellField : IEnumerable<Cell>
     {
         for (int row = 0; row < Height; row++)
             for (int col = 0; col < Width; col++)
-                yield return this[row, col];
+                yield return this[col, row];
     }
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -66,7 +66,7 @@ public class CellField : IEnumerable<Cell>
             {
                 if (row == y && col == x)
                     continue;
-                this[y, x].AddNeighbour(this[row, col]);
+                this[x, y].AddNeighbour(this[col, row]);
             }
     }
 }

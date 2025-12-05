@@ -17,12 +17,12 @@ public class PagePresenter
 
     public Rectangle[,] cells;
 
-    private readonly int _cellSize;
+    private readonly double _cellSize;
 
     private readonly SolidColorBrush _emptyColor = new SolidColorBrush(Colors.White);
-    private readonly SolidColorBrush _gridColor = new SolidColorBrush(Colors.DarkSeaGreen);
+    private readonly SolidColorBrush _gridColor = new SolidColorBrush(Colors.DarkGray);
 
-    public PagePresenter(Canvas canvas, int width, int height, int cellSize,
+    public PagePresenter(Canvas canvas, int width, int height, double cellSize,
         EventHandler<PointerPressedEventArgs>? cellClickedHandler = null)
     {
         _cellClickedHandler = cellClickedHandler;
@@ -53,8 +53,8 @@ public class PagePresenter
             {
                 var cell = new Rectangle
                 {
-                    Width = _cellSize - 1, // -1 для границ
-                    Height = _cellSize - 1,
+                    Width = _cellSize - _cellSize / 10, // -1 для границ
+                    Height = _cellSize - _cellSize / 10,
                     Fill = _emptyColor,
                     Stroke = _gridColor,
                     StrokeThickness = 1

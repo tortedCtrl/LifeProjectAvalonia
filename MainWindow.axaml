@@ -58,10 +58,10 @@
                            Margin="0,0,0,5"/>
 				<Slider x:Name="SpeedSlider"
                         Width="200"
-                        Minimum="100"
+                        Minimum="20"
                         Maximum="1000"
                         Value="300"
-                        TickFrequency="100"
+                        TickFrequency="20"
                         IsSnapToTickEnabled="True"/>
 				<TextBlock Text="{Binding #SpeedSlider.Value, StringFormat='{}{0:F0} мс'}"
                            HorizontalAlignment="Center"

@@ -14,7 +14,7 @@ public partial class LifePagePresenter : UserControl
 
     private PagePresenter _presenter;
 
-    public LifePagePresenter(GameController controller, int width, int height, int cellSize)
+    public LifePagePresenter(GameController controller, int width, int height, double cellSize)
     {
         InitializeComponent();
 

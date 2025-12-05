@@ -9,7 +9,7 @@ namespace LifeProjectAvalonia;
 public partial class FavoritesWindow : Window
 {
     private PagePresenter _presenter;
-    public FavoritesWindow(Scanner scanner, int width, int height, int cellSize)
+    public FavoritesWindow(Scanner scanner, int width, int height, double cellSize)
     {
         InitializeComponent();
 

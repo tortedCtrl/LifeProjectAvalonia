@@ -20,7 +20,7 @@ public abstract class Pattern
 
         return (false, null);
 
-        
+
         (bool, List<Cell>?) ScanForm(int[,] patternForm)
         {
             List<Cell> cellsInPatter = new();
@@ -105,12 +105,35 @@ public class LightPattern : Pattern
 public class GliderPattern : Pattern
 {
     public override bool Stable => false;
-    protected override List<int[,]> PatternForms => [
-    new int[,] {
+    protected override List<int[,]> PatternForms => [orig];
+        
+
+    private int[,] orig = new int[,] {
         { 2, 0, 0, 0, 0 },
         { 2, 0, 1, 0, 0 },
         { 0, 0, 0, 1, 0 },
         { 0, 1, 1, 1, 0 },
-        { 0, 0, 0, 0, 0 } }];
+        { 0, 0, 0, 0, 0 } };
+
+
+
+    public static int[,] CreateMirroredMatrix(int[,] original, bool horizontally, bool vertically)
+    {
+        int rows = original.GetLength(0);
+        int cols = original.GetLength(1);
+        int[,] mirrored = new int[rows, cols];
+
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                int newRow = vertically ? rows - 1 - i : i;
+                int newCol = horizontally ? cols - 1 - j : j;
+                mirrored[i, j] = original[newRow, newCol];
+            }
+        }
+
+        return mirrored;
+    }
 }
 

@@ -22,7 +22,7 @@ public struct Dead : CellState
         return new Dead();
     }
 
-    public IImmutableSolidColorBrush BrushToPaintCell() => Brushes.LightGray;
+    public IImmutableSolidColorBrush BrushToPaintCell() => Brushes.LightBlue;
 }
 public struct White : CellState
 {
@@ -55,10 +55,10 @@ public struct Black : CellState
 
     public CellState NextState(List<Cell> nbors, int blackNear, int whiteNear)
     {
-        if (blackNear + 1 < whiteNear)
+        if (blackNear + 0 < whiteNear)
             return new White();
 
-        if (blackNear == 2 || blackNear == 3)
+        if (blackNear == 2 || blackNear == 3 || blackNear == 4)
             return new Black();
 
         return new Dead();

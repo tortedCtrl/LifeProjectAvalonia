@@ -10,6 +10,7 @@ namespace LifeProjectAvalonia;
 
 internal class ScannerTerrainDecorator : ITerrain
 {
+    private Action<Cell> _cellClearer;
     private Action<Cell> _cellPainter;
     private ITerrain _wrappedTerrain;
 
@@ -23,6 +24,7 @@ internal class ScannerTerrainDecorator : ITerrain
         var favortites = CreateWindow();
 
         _cellPainter = favortites.PaintBox;
+        _cellClearer = favortites.Clear;
         // + Closing => (_, _)
 
         FavoritesWindow CreateWindow()
@@ -56,12 +58,8 @@ internal class ScannerTerrainDecorator : ITerrain
     public void StablePatternEncountered(List<Cell> pattern) =>
         _wrappedTerrain.StablePatternEncountered(pattern);
 
-    public void Draw()
-    {
-        _wrappedTerrain.Draw();
-        foreach (Cell cell in Field)
-            _cellPainter(cell);
-    }
+    public void DrawCell(Cell cell) => //parent draw called in parent make turn
+        _cellPainter(cell);
 
     private void ScanPatterns(CellField cells)
     {
@@ -73,7 +71,10 @@ internal class ScannerTerrainDecorator : ITerrain
 
         AppendAllBlack();
 
-        Draw();
+        foreach (Cell cell in Field.Where(cell => cell.State is Dead))
+            _cellClearer(cell);
+        foreach(Cell cell in Field.Where(cell => cell.State is not Dead))
+            DrawCell(cell);
 
         return;
 

@@ -15,14 +15,15 @@ public class GameController
 
     private bool _pause = false;
 
-    public GameController(int _width, int _height, int timeDelay, Action<Cell> lifeFormPainter, StartData windowData)
+    public GameController(int _width, int _height, int timeDelay, Action<Cell> lifeFormPainter, Action<Cell> lifeFormClearer, StartData windowData)
     {
         if (_width < 1 || _height < 1) throw new ArgumentException("Width or Height <= 0");
 
         TimeDelay = timeDelay;
-        terrain = new Terrain(_width, _height, lifeFormPainter);
 
-        terrain = new ScannerTerrainDecorator(terrain, windowData);
+        terrain = new FramedCellsTerrainDecorator(new Terrain(_width, _height, lifeFormPainter, lifeFormClearer));
+
+        terrain = new FramedCellsTerrainDecorator(new ScannerTerrainDecorator(terrain, windowData));
     }
 
     public void ToggleGame()

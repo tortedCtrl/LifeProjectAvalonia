@@ -20,9 +20,16 @@ public partial class LifePagePresenter : UserControl
     {
         _controller = controller;
     }
-
-    public void PaintBox(Cell cell) =>
+    
+    public void ClearBox(Cell cell)
+    {
+        _presenter.cells[cell.X, cell.Y].Opacity = 0;
+    }
+    public void PaintBox(Cell cell)
+    {
+        _presenter.cells[cell.X, cell.Y].Opacity = 1;
         _presenter.cells[cell.X, cell.Y].Fill = cell.BrushToPaintCell();
+    }
 
     private void StartButton_Click(object? sender, RoutedEventArgs e) =>
         _controller?.ToggleGame();

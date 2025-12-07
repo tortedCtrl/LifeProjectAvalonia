@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LifeProjectAvalonia;
 
@@ -15,12 +14,14 @@ public class Terrain : ITerrain
     private List<CellColony> colonies = new();
 
     private Action<Cell> _cellPainter;
+    private Action<Cell> _cellClearer;
 
-    public Terrain(int width, int height, Action<Cell> fieldPainter)
+    public Terrain(int width, int height, Action<Cell> fieldPainter, Action<Cell> fieldClearer)
     {
         Field = new(width, height);
 
         _cellPainter = fieldPainter != null ? fieldPainter : throw new NullReferenceException(nameof(fieldPainter));
+        _cellClearer = fieldClearer != null ? fieldClearer : throw new NullReferenceException(nameof(fieldClearer));
     }
 
     public void MakeTurn()
@@ -35,7 +36,10 @@ public class Terrain : ITerrain
 
         colonies.ForEach(colony => colony.TryMove());
 
-        Draw();
+        foreach (Cell cell in Field.Where(cell => cell.State is Dead))
+            _cellClearer(cell);
+        foreach (Cell cell in Field.Where(cell => cell.State is not Dead))
+            DrawCell(cell);
     }
 
     public void Randomize()
@@ -44,7 +48,10 @@ public class Terrain : ITerrain
             if (Random.Shared.Next(4) == 0)
                 cell.ToWhite();
 
-        Draw();
+        foreach (Cell cell in Field.Where(cell => cell.State is Dead))
+            _cellClearer(cell);
+        foreach (Cell cell in Field.Where(cell => cell.State is not Dead))
+            DrawCell(cell);
     }
 
     public void StablePatternEncountered(List<Cell> stablePattern)
@@ -53,11 +60,8 @@ public class Terrain : ITerrain
 
         colonies.Add(born);
     }
-    public void Draw()
-    {
-        foreach (Cell cell in Field)
-            _cellPainter?.Invoke(cell);
-    }
+    public void DrawCell(Cell cell) =>
+        _cellPainter?.Invoke(cell);
 
 
     private void UniteAllColonies()

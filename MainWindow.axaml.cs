@@ -53,7 +53,7 @@ public partial class MainWindow : Window
 
         void InitController()
         {
-            var controller = new GameController(data.width, data.height, data.timeDelay, lifePresenter.PaintBox, data);
+            var controller = new GameController(data.width, data.height, data.timeDelay, lifePresenter.PaintBox, lifePresenter.ClearBox, data);
             lifePresenter.AssignController(controller);
             if (data.randomize) controller.terrain.Randomize();
         }

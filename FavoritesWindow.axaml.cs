@@ -29,8 +29,12 @@ public partial class FavoritesWindow : Window
         _presenter = new PagePresenter(canvas, width, height, cellSize);
         Content = control;
     }
-
-    public void PaintBox(Cell cell) =>
+    public void Clear(Cell cell) =>
+        _presenter.cells[cell.X, cell.Y].Opacity = 0;
+    public void PaintBox(Cell cell)
+    {
+        _presenter.cells[cell.X, cell.Y].Opacity = 1;
         _presenter.cells[cell.X, cell.Y].Fill = cell.BrushToPaintCell();
+    }
     
 }

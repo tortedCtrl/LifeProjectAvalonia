@@ -53,8 +53,8 @@ public class PagePresenter
             {
                 var cell = new Rectangle
                 {
-                    Width = _cellSize - _cellSize / 10, // -1 для границ
-                    Height = _cellSize - _cellSize / 10,
+                    Width = _cellSize * 0.9, // -10% для границ
+                    Height = _cellSize * 0.9,
                     Fill = _emptyColor,
                     Stroke = _gridColor,
                     StrokeThickness = 1

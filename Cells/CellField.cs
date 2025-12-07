@@ -22,6 +22,8 @@ public class CellField : IEnumerable<Cell>
         foreach (Cell cell in this)
             LinkWithNeighbours(cell);
 
+        return;
+
 
         Cell[,] InitCells()
         {

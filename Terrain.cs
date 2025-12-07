@@ -1,23 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LifeProjectAvalonia;
 
-public class Terrain
+public class Terrain : ITerrain
 {
-    public event Action<CellField>? TurnFinished;
-
     public CellField Field { get; init; }
 
     private List<CellColony> colonies = new();
 
-    public Terrain(int width, int height)
+    private Action<CellField> _fieldPainter;
+
+    public Terrain(int width, int height, Action<CellField> fieldPainter)
     {
         Field = new(width, height);
+
+        _fieldPainter = fieldPainter != null ? fieldPainter : throw new NullReferenceException(nameof(fieldPainter));
+
+
     }
 
-    public void Iterate()
+    public void MakeTurn()
     {
         UniteAllColonies();
 
@@ -29,7 +36,7 @@ public class Terrain
 
         colonies.ForEach(colony => colony.TryMove());
 
-        TurnFinished?.Invoke(Field);
+        _fieldPainter?.Invoke(Field);
     }
 
     public void Randomize()
@@ -38,7 +45,7 @@ public class Terrain
             if (Random.Shared.Next(4) == 0)
                 cell.ToWhite();
 
-        TurnFinished?.Invoke(Field);
+        _fieldPainter(Field);
     }
 
     public void StablePatternEncountered(List<Cell> stablePattern)

@@ -4,9 +4,9 @@ using System.Text;
 
 namespace LifeProjectAvalonia;
 
-public class Scanner : IDisposable
+public class Scanner
 {
-    public event Action<CellField>? PatternDetected;
+    /*public event Action<CellField>? PatternDetected;
 
     private readonly Pattern[] patterns = { new SquarePattern(), new LightPattern(), new GliderPattern(), new HivePattern() };
 
@@ -74,6 +74,6 @@ public class Scanner : IDisposable
                 _scanningField[cell.X, cell.Y].ToBlack();
             }
         }
-    }
+    }*/
 }
 

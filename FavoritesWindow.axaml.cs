@@ -9,7 +9,7 @@ namespace LifeProjectAvalonia;
 public partial class FavoritesWindow : Window
 {
     private PagePresenter _presenter;
-    public FavoritesWindow(Scanner scanner, int width, int height, double cellSize)
+    public FavoritesWindow(int width, int height, double cellSize)
     {
         InitializeComponent();
 
@@ -28,11 +28,9 @@ public partial class FavoritesWindow : Window
         control.Content = canvas;
         _presenter = new PagePresenter(canvas, width, height, cellSize);
         Content = control;
-
-        scanner.PatternDetected += PaintField;
     }
 
-    private void PaintField(CellField field)
+    public void PaintField(CellField field)
     {
         foreach (Cell cell in field)
         {

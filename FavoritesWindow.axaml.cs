@@ -30,11 +30,7 @@ public partial class FavoritesWindow : Window
         Content = control;
     }
 
-    public void PaintField(CellField field)
-    {
-        foreach (Cell cell in field)
-        {
-            _presenter.cells[cell.X, cell.Y].Fill = cell.BrushToPaintCell();
-        }
-    }
+    public void PaintBox(Cell cell) =>
+        _presenter.cells[cell.X, cell.Y].Fill = cell.BrushToPaintCell();
+    
 }

@@ -10,4 +10,6 @@ public interface ITerrain
     public void Randomize();
 
     public void StablePatternEncountered(List<Cell> pattern);
+
+    public void Draw();
 }

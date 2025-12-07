@@ -13,15 +13,13 @@ public class Terrain : ITerrain
 
     private List<CellColony> colonies = new();
 
-    private Action<CellField> _fieldPainter;
+    private Action<Cell> _cellPainter;
 
-    public Terrain(int width, int height, Action<CellField> fieldPainter)
+    public Terrain(int width, int height, Action<Cell> fieldPainter)
     {
         Field = new(width, height);
 
-        _fieldPainter = fieldPainter != null ? fieldPainter : throw new NullReferenceException(nameof(fieldPainter));
-
-
+        _cellPainter = fieldPainter != null ? fieldPainter : throw new NullReferenceException(nameof(fieldPainter));
     }
 
     public void MakeTurn()
@@ -36,7 +34,7 @@ public class Terrain : ITerrain
 
         colonies.ForEach(colony => colony.TryMove());
 
-        _fieldPainter?.Invoke(Field);
+        Draw();
     }
 
     public void Randomize()
@@ -45,7 +43,7 @@ public class Terrain : ITerrain
             if (Random.Shared.Next(4) == 0)
                 cell.ToWhite();
 
-        _fieldPainter(Field);
+        Draw();
     }
 
     public void StablePatternEncountered(List<Cell> stablePattern)
@@ -54,6 +52,12 @@ public class Terrain : ITerrain
 
         colonies.Add(born);
     }
+    public void Draw()
+    {
+        foreach (Cell cell in Field)
+            _cellPainter?.Invoke(cell);
+    }
+
 
     private void UniteAllColonies()
     {
@@ -82,5 +86,6 @@ public class Terrain : ITerrain
         colonies.Remove(A);
         colonies.Remove(B);
     }
+
 }
 

@@ -15,7 +15,7 @@ public class GameController
 
     private bool _pause = false;
 
-    public GameController(int _width, int _height, int timeDelay, Action<CellField> lifeFormPainter, StartData windowData)
+    public GameController(int _width, int _height, int timeDelay, Action<Cell> lifeFormPainter, StartData windowData)
     {
         if (_width < 1 || _height < 1) throw new ArgumentException("Width or Height <= 0");
 

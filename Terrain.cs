@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -86,6 +87,5 @@ public class Terrain : ITerrain
         colonies.Remove(A);
         colonies.Remove(B);
     }
-
 }
 

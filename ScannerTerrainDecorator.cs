@@ -58,6 +58,7 @@ internal class ScannerTerrainDecorator : ITerrain
 
     public void Draw()
     {
+        _wrappedTerrain.Draw();
         foreach (Cell cell in Field)
             _cellPainter(cell);
     }

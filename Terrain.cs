@@ -45,7 +45,7 @@ public class Terrain : ITerrain
     public void Randomize()
     {
         foreach (Cell cell in Field)
-            if (Random.Shared.Next(4) == 0)
+            if (Random.Shared.Next(7) == 0)
                 cell.ToWhite();
 
         foreach (Cell cell in Field.Where(cell => cell.State is Dead))
@@ -92,4 +92,3 @@ public class Terrain : ITerrain
         colonies.Remove(B);
     }
 }
-

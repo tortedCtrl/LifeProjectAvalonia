@@ -21,9 +21,11 @@ public class GameController
 
         TimeDelay = timeDelay;
 
-        terrain = new FramedCellsTerrainDecorator(new Terrain(_width, _height, lifeFormPainter, lifeFormClearer));
+        terrain = new Terrain(_width, _height, lifeFormPainter, lifeFormClearer);
+        terrain = new FramedCellsTerrainDecorator(terrain);
 
-        terrain = new FramedCellsTerrainDecorator(new ScannerTerrainDecorator(terrain, windowData));
+        terrain = new ScannerTerrainDecorator(terrain, windowData);
+        terrain = new FramedCellsTerrainDecorator(terrain);
     }
 
     public void ToggleGame()

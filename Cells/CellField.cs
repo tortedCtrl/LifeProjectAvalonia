@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace LifeProjectAvalonia;
 
@@ -39,10 +38,7 @@ public class CellField : IEnumerable<Cell>
         }
     }
 
-    public Cell this[int x, int y]
-    {
-        get => _field[x + 1, y + 1];
-    }
+    public Cell this[int x, int y] => _field[x + 1, y + 1];   
 
     /// <summary>
     /// Iterate all cells which not borders
@@ -57,6 +53,7 @@ public class CellField : IEnumerable<Cell>
 
     IEnumerator IEnumerable.GetEnumerator()
     {
+    
         return GetEnumerator();
     }
 

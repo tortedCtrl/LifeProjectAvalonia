@@ -69,29 +69,33 @@
 			</StackPanel>
 		</StackPanel>
 
-		<!-- Центральная часть - кнопка -->
-		<Button x:Name="StartButton"
-                Content="Начать"
-                FontSize="16"
-                Width="120"
-                Height="40"
-				Margin="-6,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"/>
+		<StackPanel
+			Orientation="Horizontal"
+            VerticalAlignment="Center"
+			HorizontalAlignment="Center"
+            Spacing="15">
 
-		<ComboBox x:Name="GameMode"
-                FontSize="16"
-                Width="120"
-                Height="40"
-				Margin="60,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-				SelectedIndex="0"
-				MaxDropDownHeight="100">
+			<!-- Центральная часть - кнопка -->
+			<Button x:Name="StartButton"
+					Content="Начать"
+					FontSize="16"
+					Width="120"
+					Height="40"
+					HorizontalAlignment="Center"
+					VerticalAlignment="Center"/>
 
-			<ComboBoxItem>Classic</ComboBoxItem>
-			<ComboBoxItem>Colonies</ComboBoxItem>
-		</ComboBox>
+			<ComboBox x:Name="GameMode"
+					FontSize="16"
+					Width="120"
+					Height="40"
+					HorizontalAlignment="Center"
+					VerticalAlignment="Center"
+					SelectedIndex="0"
+					MaxDropDownHeight="100">
 
+				<ComboBoxItem>Classic</ComboBoxItem>
+				<ComboBoxItem>Colonies</ComboBoxItem>
+			</ComboBox>
+		</StackPanel>
 	</DockPanel>
 </Window>

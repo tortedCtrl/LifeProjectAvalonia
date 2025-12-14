@@ -48,7 +48,7 @@
 							   Foreground="#CCCCCC"/>
 
 					<Grid ColumnDefinitions="150,50" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
-						<TextBlock Text="Текущее поколение:"
+						<TextBlock Text="Поколение:"
 								   Foreground="#A0A0A0"
 								   Grid.Row="0" Grid.Column="0"/>
 						<TextBlock x:Name="GenerationCount"

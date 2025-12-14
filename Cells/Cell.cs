@@ -10,8 +10,6 @@ namespace LifeProjectAvalonia;
 
 public class Cell
 {
-    public CellColony? Colony => State.Colony;
-
     private CellState _nextState;
 
     private List<Cell> _neighbours = new(8);
@@ -48,7 +46,7 @@ public class Cell
         
 
         if (State is Black && _nextState is not Black)
-            Colony?.Leave(this);
+            CellColony.GetColony(this).Item2?.Leave(this);
 
        State = _nextState;
     }

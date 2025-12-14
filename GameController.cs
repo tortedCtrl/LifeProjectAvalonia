@@ -8,42 +8,23 @@ namespace LifeProjectAvalonia;
 
 public class GameController
 {
-    private ITerrain terrain;
+    private ITerrain _terrain;
+
+    private Action<bool> onFramingCells_LifePresenter;
+    private Action<bool> onFramingCells_FavoritesPresenter;
+
 
     private bool _started = false;
-    private int _timeDelay = 600;
-
     private bool _pause = false;
 
+    private int _timeDelay = 600;
 
-    private ITerrain statistics1;
-    private ITerrain scanner;
-    private ITerrain statistics2;
-
-    public GameController(int _width, int _height, int timeDelay, LifePagePresenter presenter, StartData windowData)
+    public GameController(GameFactory factory, int timeDelay)
     {
-        if (_width < 1 || _height < 1) throw new ArgumentException("Width or Height <= 0");
+        _terrain = factory.GetTerrain();
+        (onFramingCells_LifePresenter, onFramingCells_FavoritesPresenter) = factory.GetFramingCellsActions();
 
-        TimeDelay = timeDelay;
-
-        terrain = new Terrain(_width, _height, presenter.PaintBox, presenter.ClearBox);
-        (statistics1, scanner, statistics2) = WrapTerrain();
-
-        return;
-
-        (ITerrain, ITerrain, ITerrain) WrapTerrain()
-        {
-            statistics1 = new StatisticsTerrainDecorator(terrain, presenter, presenter.UpdateTurnTime);
-            terrain = statistics1;
-            terrain = new FramedCellsTerrainDecorator(terrain);
-
-            scanner = new ScannerTerrainDecorator(terrain, windowData, ShowEmptyCells_FavoritesPresenter);
-            terrain = scanner;
-            statistics2 = new StatisticsTerrainDecorator(terrain, presenter, presenter.UpdateScantime, statAll: false);
-            terrain = statistics2;
-            terrain = new FramedCellsTerrainDecorator(terrain);
-            return (statistics1, scanner, statistics2);
-        }
+        _timeDelay = timeDelay;
     }
 
     private int TimeDelay
@@ -53,21 +34,10 @@ public class GameController
     }
 
 
-    public void ShowEmptyCells_LifePresenter(bool show)
-    {
-        if (show == false)
-            scanner.SetWrappedTerrain(statistics1);
-        else
-            scanner.SetWrappedTerrain(new FramedCellsTerrainDecorator(statistics1));
-    }
-    public void ShowEmptyCells_FavoritesPresenter(bool show)
-    {
-        if (show == false)
-            terrain = statistics2;
-        else
-            terrain = new FramedCellsTerrainDecorator(statistics2);
-    }
-    public void Randomize() => terrain.Randomize();
+    public void ShowEmptyCells_LifePresenter(bool show) => onFramingCells_LifePresenter(show);
+    public void ShowEmptyCells_FavoritesPresenter(bool show) => onFramingCells_FavoritesPresenter(show);
+
+    public void Randomize() => _terrain.Randomize();
 
     public void ToggleGame()
     {
@@ -85,7 +55,7 @@ public class GameController
         while (true)
         {
             if (_pause == false)
-                terrain.MakeTurn();
+                _terrain.MakeTurn();
 
             await Task.Delay(TimeDelay);
         }

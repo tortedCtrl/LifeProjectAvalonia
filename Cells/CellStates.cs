@@ -32,7 +32,8 @@ public struct White : CellState
     {
         if (blackNear > whiteNear + 1)
         {
-            Colony = nbors.FirstOrDefault(cell => cell.State is Black)?.Colony;
+            Cell? cell = nbors.FirstOrDefault(cell => cell.State is Black);
+            Colony = CellColony.GetColony(cell).Item2;
             return new Black(Colony);
         }
 

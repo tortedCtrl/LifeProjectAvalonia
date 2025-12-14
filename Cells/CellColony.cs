@@ -6,6 +6,8 @@ namespace LifeProjectAvalonia;
 
 public class CellColony
 {
+    private static Dictionary<Cell, CellColony> colonyOf = new();
+
     private List<Cell> _members;
     private (int x, int y) _direction;
 
@@ -22,6 +24,7 @@ public class CellColony
         foreach (Cell cell in _members)
         {
             cell.ToBlack(this);
+            colonyOf[cell] = this;
         }
 
         SetNewDirection();
@@ -34,6 +37,13 @@ public class CellColony
         var colony = new CellColony(left._members, left._field);
         colony.PassNextTurn();
         return colony;
+    }
+
+    public static (bool, CellColony?) GetColony(Cell? cell)
+    {
+        if (cell == null) return (false, null);
+        bool hasColony = colonyOf.TryGetValue(cell, out CellColony? colony);
+        return (hasColony, colony);
     }
 
     private bool CanMove => _members.All(cell => cell.CanMove(Direction));
@@ -53,16 +63,20 @@ public class CellColony
     }
 
 
-    public (bool, Cell?) CellInNeighbourColony()
+    public (bool, Cell?, CellColony?) CellInNeighbourColony()
     {
+        CellColony? neighbourColony = null;
         foreach (Cell cell in _members)
         {
-            Cell? neighbourNotFromHere = cell.Neighbours.FirstOrDefault(cell => cell.Colony != null && cell.Colony != this);
+            
+            Cell? neighbourNotFromHere = cell.Neighbours.FirstOrDefault(cell =>
+                colonyOf.TryGetValue(cell, out neighbourColony) && neighbourColony != this);
+
             if (neighbourNotFromHere != null)
-                return (true, neighbourNotFromHere);
+                return (true, neighbourNotFromHere, neighbourColony);
         }
 
-        return (false, null);
+        return (false, null, null);
     }
 
     public void TryMove()
@@ -79,9 +93,14 @@ public class CellColony
         PassNextTurn();
         SetNewDirection();
         _members.Add(newCell);
+
+        colonyOf[newCell] = this;
     }
-    public void Leave(Cell oldCell) =>
+    public void Leave(Cell oldCell)
+    {
+        colonyOf.Remove(oldCell);
         _members.Remove(oldCell);
+    }
 
 
     private void Move()

@@ -2,10 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
 namespace LifeProjectAvalonia;
 
 internal class ScannerTerrainDecorator : ITerrain
@@ -96,8 +92,7 @@ internal class ScannerTerrainDecorator : ITerrain
 
                 Revive(aliveCells!);
 
-                if (pattern.Stable)
-                    _wrappedTerrain.StablePatternEncountered(aliveCells!);
+                if (pattern.Stable) _wrappedTerrain.StablePatternEncountered(aliveCells!);
 
                 return;
             }
@@ -118,4 +113,6 @@ internal class ScannerTerrainDecorator : ITerrain
             }
         }
     }
+
+    public void Draw() => _wrappedTerrain.Draw();
 }

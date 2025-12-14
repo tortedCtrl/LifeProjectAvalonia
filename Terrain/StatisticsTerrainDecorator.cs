@@ -31,6 +31,8 @@ public class StatisticsTerrainDecorator : ITerrain
 
     public CellField Field => _wrappedTerrain.Field;
 
+    public void Draw() => _wrappedTerrain.Draw();
+
     public void DrawCell(Cell cell) => _wrappedTerrain.DrawCell(cell);
 
     public void MakeTurn()

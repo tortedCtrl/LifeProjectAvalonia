@@ -43,4 +43,6 @@ public class FramedCellsTerrainDecorator : ITerrain
         _wrappedTerrain = newWrappedTerrain;
         return prev;
     }
+
+    public void Draw() => _wrappedTerrain.Draw();
 }

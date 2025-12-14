@@ -1,8 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using System;
-using System.Runtime.CompilerServices;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Avalonia;
 
 namespace LifeProjectAvalonia;
 
@@ -12,12 +11,10 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
-
         Height = 825;
         Width = 1050;
 
-        Position = new Avalonia.PixelPoint(10, 100);
-
+        Position = new PixelPoint(10, 100);
 
         StartButton.Click += StartButton_Click;
     }
@@ -46,7 +43,7 @@ public partial class MainWindow : Window
 
         LifePagePresenter InitPresenters()
         {
-            var lifePresenter = new LifePagePresenter(data.width, data.height, data.cellSize);
+            var lifePresenter = new LifePagePresenter(data);
             Content = lifePresenter;
 
             return lifePresenter;
@@ -54,7 +51,20 @@ public partial class MainWindow : Window
 
         void InitController()
         {
-            var controller = new GameController(data.width, data.height, data.timeDelay, lifePresenter, data);
+            GameFactory factory;
+            switch (GameMode.SelectedIndex)
+            {
+                case 0:
+                    factory = new ClassicGameFactory(data, lifePresenter);
+                    break;
+                case 1:
+                    factory = new ColoniesGameFactory(data, lifePresenter);
+                    break;
+                default:
+                    throw new NotImplementedException("Not prepared Mode");
+            }
+
+            var controller = new GameController(factory, data.timeDelay);
             lifePresenter.AssignController(controller);
             if (data.randomize) controller.Randomize();
         }

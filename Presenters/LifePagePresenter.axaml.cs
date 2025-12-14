@@ -18,11 +18,11 @@ public partial class LifePagePresenter : UserControl
     private int _blackTotal;
 
 
-    public LifePagePresenter(int width, int height, double cellSize)
+    public LifePagePresenter(StartData data)
     {
         InitializeComponent();
 
-        _presenter = new(GameCanvas, width, height, cellSize, null);
+        _presenter = new(GameCanvas, data.width, data.height, data.cellSize, null);
 
         FramedCellsButton.IsCheckedChanged += (s, e) =>
         {

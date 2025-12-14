@@ -24,6 +24,11 @@ public class Terrain : ITerrain
         _cellClearer = fieldClearer != null ? fieldClearer : throw new NullReferenceException(nameof(fieldClearer));
     }
 
+    public ITerrain SetWrappedTerrain(ITerrain newWrappedTerrain) //Создать отдельный интерфейс или абстракцию для декоратора, вместо реализации декораторами ITerrain
+    {
+        throw new NotImplementedException();
+    }
+
     public void MakeTurn()
     {
         UniteAllColonies();

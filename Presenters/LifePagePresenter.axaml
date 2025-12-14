@@ -7,6 +7,8 @@
 
 	<Grid>
 		<Canvas x:Name="GameCanvas"
+				HorizontalAlignment="Left"
+				Margin="10,0"
                 Background="White"/>
 
 		<Button x:Name="StartButton"
@@ -18,5 +20,211 @@
                 VerticalAlignment="Top"
                 Click="StartButton_Click"
 				Background="Green"/>
+
+		<CheckBox x:Name="FramedCellsButton"
+                Margin="200,20"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+				IsChecked ="True"/>
+
+
+		<StackPanel Spacing="10"
+					HorizontalAlignment="Right"
+					Margin="10,10">
+			<!-- Заголовок -->
+			<TextBlock Text="СТАТИСТИКА"
+					   FontSize="16"
+					   FontWeight="Bold"
+					   Foreground="White"
+					   Margin="0,0,0,10"/>
+
+			<!-- Общая статистика -->
+			<Border Background="#252526"
+					CornerRadius="5"
+					Padding="10">
+				<StackPanel Spacing="8">
+					<TextBlock Text="Общая информация"
+							   FontWeight="SemiBold"
+							   Foreground="#CCCCCC"/>
+
+					<Grid ColumnDefinitions="150,50" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+						<TextBlock Text="Текущее поколение:"
+								   Foreground="#A0A0A0"
+								   Grid.Row="0" Grid.Column="0"/>
+						<TextBlock x:Name="GenerationCount"
+								   Text="0"
+								   Foreground="White"
+								   Grid.Row="0" Grid.Column="1"/>
+
+						<TextBlock Text="Время расчётов:"
+								   Foreground="#A0A0A0"
+								   Grid.Row="1" Grid.Column="0"/>
+						<TextBlock x:Name="TurnTime"
+								   Text="0"
+								   Foreground="White"
+								   Grid.Row="1" Grid.Column="1"/>
+
+						<TextBlock Text="Время расчётов"
+								   Foreground="#A0A0A0"
+								   Grid.Row="2" Grid.Column="0"/>
+						<TextBlock Text="и сканирования:"
+								   Foreground="#A0A0A0"
+								   Grid.Row="3" Grid.Column="0"/>
+						<TextBlock x:Name="ScanTime"
+								   Text="0"
+								   Foreground="White"
+								   Grid.Row="3" Grid.Column="1"/>
+
+						<TextBlock Text="Всего клеток:"
+								   Foreground="#A0A0A0"
+								   Grid.Row="4" Grid.Column="0"/>
+						<TextBlock x:Name="TotalCells"
+								   Text="0"
+								   Foreground="White"
+								   Grid.Row="4" Grid.Column="1"/>
+					</Grid>
+				</StackPanel>
+			</Border>
+
+			<!-- Статистика по типам инфузорий -->
+			<Border Background="#252526"
+					CornerRadius="5"
+					Padding="10">
+				<StackPanel Spacing="8">
+					<TextBlock Text="Типы инфузорий"
+							   FontWeight="SemiBold"
+							   Foreground="#CCCCCC"/>
+					<Border Background="#1E1E1F"
+							CornerRadius="3"
+							Padding="8"
+							Margin="0,0,0,5">
+						<StackPanel Spacing="4">
+							<TextBlock Text="Мёртвые"
+									   FontWeight="SemiBold"
+									   Foreground="White"/>
+
+							<Grid ColumnDefinitions="Auto,*"
+								  RowDefinitions="Auto,Auto,Auto">
+								<TextBlock Text="Количество:"
+										   Foreground="#A0A0A0"
+										   Grid.Row="0" Grid.Column="0"/>
+								<TextBlock Text="---"
+										   x:Name="EmptyTotal"
+										   Foreground="White"
+										   Grid.Row="0" Grid.Column="1"/>
+
+								<TextBlock Text="Изменение:"
+										   Foreground="#A0A0A0"
+										   Grid.Row="1" Grid.Column="0"/>
+								<StackPanel Orientation="Horizontal"
+											Grid.Row="1" Grid.Column="1">
+									<TextBlock Text="---"
+											   x:Name="EmptyChanged"
+											   Foreground="White"/>
+									<TextBlock Text=" ("
+											   Foreground="#A0A0A0"/>
+									<TextBlock Text="---"
+											   x:Name="EmptyChangedPercent"
+											   Foreground="Yellow"/>
+									<TextBlock Text="%)"
+											   Foreground="#A0A0A0"/>
+								</StackPanel>
+
+								<TextBlock Text="Цвет:"
+										   Foreground="#A0A0A0"
+										   Grid.Row="2" Grid.Column="0"/>
+								<Rectangle Width="20"
+										   Height="20"
+										   Fill="Aqua"
+										   Grid.Row="2" Grid.Column="1"/>
+							</Grid>
+							
+							
+							<TextBlock Text="Белые"
+									   FontWeight="SemiBold"
+									   Foreground="White"/>
+
+							<Grid ColumnDefinitions="Auto,*"
+								  RowDefinitions="Auto,Auto,Auto">
+								<TextBlock Text="Количество:"
+										   Foreground="#A0A0A0"
+										   Grid.Row="0" Grid.Column="0"/>
+								<TextBlock Text="---"
+										   x:Name="WhiteTotal"
+										   Foreground="White"
+										   Grid.Row="0" Grid.Column="1"/>
+
+								<TextBlock Text="Изменение:"
+										   Foreground="#A0A0A0"
+										   Grid.Row="1" Grid.Column="0"/>
+								<StackPanel Orientation="Horizontal"
+											Grid.Row="1" Grid.Column="1">
+									<TextBlock Text="---"
+											   x:Name="WhiteChanged"
+											   Foreground="White"/>
+									<TextBlock Text=" ("
+											   Foreground="#A0A0A0"/>
+									<TextBlock Text="---"
+											   x:Name="WhiteChangedPercent"
+											   Foreground="Yellow"/>
+									<TextBlock Text="%)"
+											   Foreground="#A0A0A0"/>
+								</StackPanel>
+
+								<TextBlock Text="Цвет:"
+										   Foreground="#A0A0A0"
+										   Grid.Row="2" Grid.Column="0"/>
+								<Rectangle Width="20"
+										   Height="20"
+										   Fill="White"
+										   Grid.Row="2" Grid.Column="1"/>								
+							</Grid>
+
+
+							<TextBlock Text="Чёрные"
+									   FontWeight="SemiBold"
+									   Foreground="White"/>
+
+							<Grid ColumnDefinitions="Auto,*"
+								  RowDefinitions="Auto,Auto,Auto">
+								<TextBlock Text="Количество:"
+										   Foreground="#A0A0A0"
+										   Grid.Row="0" Grid.Column="0"/>
+								<TextBlock Text="---"
+										   x:Name="BlackTotal"
+										   Foreground="White"
+										   Grid.Row="0" Grid.Column="1"/>
+
+								<TextBlock Text="Изменение:"
+										   Foreground="#A0A0A0"
+										   Grid.Row="1" Grid.Column="0"/>
+								<StackPanel Orientation="Horizontal"
+											Grid.Row="1" Grid.Column="1">
+									<TextBlock Text="---"
+											   x:Name="BlackChanged"
+											   Foreground="White"/>
+									<TextBlock Text=" ("
+											   Foreground="#A0A0A0"/>
+									<TextBlock Text="---"
+											   x:Name="BlackChangedPercent"
+											   Foreground="Yellow"/>
+									<TextBlock Text="%)"
+											   Foreground="#A0A0A0"/>
+								</StackPanel>
+
+								<TextBlock Text="Цвет:"
+										   Foreground="#A0A0A0"
+										   Grid.Row="2" Grid.Column="0"/>
+								<Rectangle Width="20"
+										   Height="20"
+										   Fill="Black"
+										   Grid.Row="2" Grid.Column="1"/>
+							</Grid>
+							
+						</StackPanel>
+					</Border>
+				</StackPanel>
+			</Border>
+		</StackPanel>
 	</Grid>
 </UserControl>

@@ -15,7 +15,7 @@ internal class ScannerTerrainDecorator : ITerrain
     private ITerrain _wrappedTerrain;
 
 
-    public ScannerTerrainDecorator(ITerrain terrain, StartData data)
+    public ScannerTerrainDecorator(ITerrain terrain, StartData data, Action<bool>? showEmptyCells)
     {
         _wrappedTerrain = terrain != null ? terrain : throw new NullReferenceException(nameof(terrain));
 
@@ -25,11 +25,10 @@ internal class ScannerTerrainDecorator : ITerrain
 
         _cellPainter = favortites.PaintBox;
         _cellClearer = favortites.Clear;
-        // + Closing => (_, _)
 
         FavoritesWindow CreateWindow()
         {
-            var favoritesPresenter = new FavoritesWindow(data.width, data.height, data.cellSize);
+            var favoritesPresenter = new FavoritesWindow(data.width, data.height, data.cellSize, showEmptyCells);
             Window favorites = favoritesPresenter;
             favorites.Show();
 
@@ -61,6 +60,14 @@ internal class ScannerTerrainDecorator : ITerrain
     public void DrawCell(Cell cell) => //parent draw called in parent make turn
         _cellPainter(cell);
 
+    public ITerrain SetWrappedTerrain(ITerrain newWrappedTerrain)
+    {
+        var prev = _wrappedTerrain;
+        _wrappedTerrain = newWrappedTerrain;
+        return prev;
+    }
+
+
     private void ScanPatterns(CellField cells)
     {
         foreach (Cell cell in Field) cell.ToDead();
@@ -73,7 +80,7 @@ internal class ScannerTerrainDecorator : ITerrain
 
         foreach (Cell cell in Field.Where(cell => cell.State is Dead))
             _cellClearer(cell);
-        foreach(Cell cell in Field.Where(cell => cell.State is not Dead))
+        foreach (Cell cell in Field.Where(cell => cell.State is not Dead))
             DrawCell(cell);
 
         return;
@@ -111,5 +118,4 @@ internal class ScannerTerrainDecorator : ITerrain
             }
         }
     }
-
 }

@@ -22,19 +22,19 @@ public class PagePresenter
     private readonly SolidColorBrush _emptyColor = new SolidColorBrush(Colors.White);
     private readonly SolidColorBrush _gridColor = new SolidColorBrush(Colors.DarkGray);
 
-    public PagePresenter(Canvas canvas, int width, int height, double cellSize,
+    public PagePresenter(Canvas canvas, int fieldWidth, int fieldHeight, double cellSize,
         EventHandler<PointerPressedEventArgs>? cellClickedHandler = null)
     {
         _cellClickedHandler = cellClickedHandler;
 
         _gameCanvas = canvas ?? throw new NullReferenceException(nameof(canvas));
 
-        _gridWidth = width > 1 ? width : 10;
-        _gridHeight = height > 1 ? height : 10;
+        _gridWidth = fieldWidth > 1 ? fieldWidth : 10;
+        _gridHeight = fieldHeight > 1 ? fieldHeight : 10;
 
         _cellSize = cellSize > 0 && cellSize < 100 ? cellSize : 30;
 
-        cells = new Rectangle[width, height];
+        cells = new Rectangle[fieldWidth, fieldHeight];
 
         InitializeGrid();
     }
@@ -53,7 +53,7 @@ public class PagePresenter
             {
                 var cell = new Rectangle
                 {
-                    Width = _cellSize * 0.9, // -10% для границ
+                    Width = _cellSize * 0.9, // -10% границы
                     Height = _cellSize * 0.9,
                     Fill = _emptyColor,
                     Stroke = _gridColor,

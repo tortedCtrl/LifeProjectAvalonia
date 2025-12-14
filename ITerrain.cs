@@ -6,6 +6,7 @@ namespace LifeProjectAvalonia;
 public interface ITerrain
 {
     public CellField Field { get; }
+    public ITerrain SetWrappedTerrain(ITerrain newWrappedTerrain);
 
     public void MakeTurn();
     public void Randomize();

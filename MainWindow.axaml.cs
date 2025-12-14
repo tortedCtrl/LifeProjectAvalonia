@@ -13,10 +13,10 @@ public partial class MainWindow : Window
         InitializeComponent();
 
 
-        Height = 900;
-        Width = 900;
+        Height = 825;
+        Width = 1050;
 
-        Position = new Avalonia.PixelPoint(50, 50);
+        Position = new Avalonia.PixelPoint(10, 100);
 
 
         StartButton.Click += StartButton_Click;
@@ -27,6 +27,7 @@ public partial class MainWindow : Window
         var data = GetData();
 
         var lifePresenter = InitPresenters();
+
 
         InitController();
 
@@ -53,13 +54,11 @@ public partial class MainWindow : Window
 
         void InitController()
         {
-            var controller = new GameController(data.width, data.height, data.timeDelay, lifePresenter.PaintBox, lifePresenter.ClearBox, data);
+            var controller = new GameController(data.width, data.height, data.timeDelay, lifePresenter, data);
             lifePresenter.AssignController(controller);
-            if (data.randomize) controller.terrain.Randomize();
+            if (data.randomize) controller.Randomize();
         }
     }
-
-
 }
 public struct StartData
 {
@@ -72,12 +71,12 @@ public struct StartData
 
     public int timeDelay;
 
-    public StartData(int width, int height, bool randomize, int timeDelay)
+    public StartData(int width, int height, bool randomize, int timeDelay, double fieldSize = 800.0)
     {
         this.width = Math.Clamp(width, 1, 200);
         this.height = Math.Clamp(height, 1, 200);
         this.randomize = randomize;
         this.timeDelay = timeDelay;
-        cellSize = 900.0 / maxSide;
+        cellSize = fieldSize / maxSide;
     }
 }

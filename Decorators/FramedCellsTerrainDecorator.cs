@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace LifeProjectAvalonia;
 
-internal class FramedCellsTerrainDecorator : ITerrain
+public class FramedCellsTerrainDecorator : ITerrain
 {
     private ITerrain _wrappedTerrain;
 
@@ -12,6 +12,7 @@ internal class FramedCellsTerrainDecorator : ITerrain
     {
         _wrappedTerrain = terrain != null ? terrain : throw new NullReferenceException(nameof(terrain));
     }
+
     public CellField Field => _wrappedTerrain.Field;
 
 
@@ -35,4 +36,11 @@ internal class FramedCellsTerrainDecorator : ITerrain
 
     public void DrawCell(Cell cell) =>
         _wrappedTerrain.DrawCell(cell);
+
+    public ITerrain SetWrappedTerrain(ITerrain newWrappedTerrain)
+    {
+        var prev = _wrappedTerrain;
+        _wrappedTerrain = newWrappedTerrain;
+        return prev;
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace LifeProjectAvalonia;
 
@@ -8,14 +9,18 @@ public class ClassicGameFactory : GameFactory
     private ITerrain? _scanner;
     private ITerrain? _statistics2;
 
-    public ClassicGameFactory(StartData windowData, LifePagePresenter presenter)
-        : base(windowData, presenter)
+    public ClassicGameFactory(StartData windowData, LifePagePresenter presenter) :
+        base(windowData, presenter)
     {
     }
     protected override ITerrain CreateTerrain()
     {
         _terrain = new Terrain(_fieldWidth, _fieldHeight, _presenter.PaintBox, _presenter.ClearBox);
         (_statistics1, _scanner, _statistics2) = WrapTerrain();
+
+
+        Dead.InjectLogic(DeadLogic);
+        White.InjectLogic(WhiteLogic);
 
         return _terrain;
 
@@ -30,18 +35,38 @@ public class ClassicGameFactory : GameFactory
             _statistics2 = new StatisticsTerrainDecorator(_terrain, _presenter, _presenter.UpdateScantime, statAll: false);
             _terrain = _statistics2;
             _terrain = new FramedCellsTerrainDecorator(_terrain);
+            _terrain = new EmptyTerrainDecorator(_terrain);
 
             return (_statistics1, _scanner, _statistics2);
         }
     }
+
+    public CellState DeadLogic(Cell related)
+    {
+        int whiteNear = related.Neighbours.Where(cell => cell.State is White).Count();
+        if (whiteNear == 3)
+            return new White(related);
+
+        return new Dead(related);
+    }
+    public CellState WhiteLogic(Cell related)
+    {
+        int whiteNear = related.Neighbours.Where(cell => cell.State is White).Count();
+        if (whiteNear == 2 || whiteNear == 3)
+            return new White(related);
+
+        return new Dead(related);
+    }
+
+
     public override void ShowEmptyCells_FavoritesPresenter(bool show)
     {
         if (_statistics2 == null) throw new NullReferenceException(nameof(_statistics2));
 
         if (show == false)
-            _terrain = _statistics2;
+            _terrain!.SetWrappedTerrain(_statistics2!);
         else
-            _terrain = new FramedCellsTerrainDecorator(_statistics2!);
+            _terrain!.SetWrappedTerrain(new FramedCellsTerrainDecorator(_statistics2!));
     }
 
     public override void ShowEmptyCells_LifePresenter(bool show)

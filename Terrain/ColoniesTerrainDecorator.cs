@@ -24,6 +24,9 @@ public class ColoniesTerrainDecorator : ITerrain
             foreach (CellColony colony in colonies)
             {
                 (bool found, Cell? common, CellColony? neighbourColony) = colony.CellInNeighbourColony();
+
+                if (found && colonies.Contains(neighbourColony) == false) continue; // НА ИСПРАВЛЕНИЕ, ДОЛЖНО РАБОТАТЬ БЕЗ ПРОВЕРКИ
+                
                 if (found)
                 {
                     Unite(colony, neighbourColony);
@@ -35,12 +38,17 @@ public class ColoniesTerrainDecorator : ITerrain
     }
     private void Unite(CellColony? A, CellColony? B)
     {
-        if (A == null || B == null) return;
+        if (A == null || B == null)
+            return;
+
+        _ = colonies.Count;
 
         colonies.Add(A + B);
 
+        _ = colonies.Count;
         colonies.Remove(A);
         colonies.Remove(B);
+        _ = colonies.Count;
     }
 
     public ITerrain SetWrappedTerrain(ITerrain newWrappedTerrain)
@@ -59,6 +67,9 @@ public class ColoniesTerrainDecorator : ITerrain
 
         foreach (Cell cell in Field)
             cell.ToNextState();
+
+        foreach (Cell cell in Field)
+            cell.State.OnStateChanged();
 
         colonies.ForEach(colony => colony.TryMove());
 

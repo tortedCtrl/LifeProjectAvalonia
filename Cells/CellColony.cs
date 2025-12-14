@@ -23,7 +23,7 @@ public class CellColony
 
         foreach (Cell cell in _members)
         {
-            cell.ToBlack(this);
+            cell.State = new Black(cell, this);
             colonyOf[cell] = this;
         }
 
@@ -39,7 +39,7 @@ public class CellColony
         return colony;
     }
 
-    public static (bool, CellColony?) GetColony(Cell? cell)
+    public static (bool inColony, CellColony? colony) GetColony(Cell? cell)
     {
         if (cell == null) return (false, null);
         bool hasColony = colonyOf.TryGetValue(cell, out CellColony? colony);
@@ -67,12 +67,11 @@ public class CellColony
     {
         CellColony? neighbourColony = null;
         foreach (Cell cell in _members)
-        {
-            
+        {            
             Cell? neighbourNotFromHere = cell.Neighbours.FirstOrDefault(cell =>
                 colonyOf.TryGetValue(cell, out neighbourColony) && neighbourColony != this);
 
-            if (neighbourNotFromHere != null)
+            if (neighbourNotFromHere != null && colonyOf[neighbourNotFromHere] == neighbourColony)
                 return (true, neighbourNotFromHere, neighbourColony);
         }
 
@@ -81,6 +80,10 @@ public class CellColony
 
     public void TryMove()
     {
+        IEnumerable<Cell> notBlacks = _members.ToList().Where(cell => cell.State is not Black);
+        foreach (Cell notBlack in notBlacks)
+            Leave(notBlack);
+
         if (CanMove)
             Move();
         else
@@ -90,6 +93,8 @@ public class CellColony
 
     public void Join(Cell newCell)
     {
+        if (_members.Contains(newCell)) return;
+
         PassNextTurn();
         SetNewDirection();
         _members.Add(newCell);
@@ -102,7 +107,6 @@ public class CellColony
         _members.Remove(oldCell);
     }
 
-
     private void Move()
     {
         if (_passesTurn)
@@ -114,9 +118,9 @@ public class CellColony
         var newMembers = _members.Select(cell =>
             _field[cell.X + Direction.x, cell.Y + Direction.y]).ToList();
 
-        _members.ForEach(cell => cell.ToDead());
+        _members.ForEach(cell => cell.State = new Dead(cell));
 
-        newMembers.ForEach(cell => cell.ToBlack(this));
+        newMembers.ForEach(cell => cell.State = new Black(cell, this));
         _members = newMembers;
     }
 

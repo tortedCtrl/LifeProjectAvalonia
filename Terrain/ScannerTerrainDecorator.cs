@@ -38,7 +38,7 @@ internal class ScannerTerrainDecorator : ITerrain
 
     public void MakeTurn()
     {
-        _wrappedTerrain.MakeTurn();
+        _wrappedTerrain.MakeTurn(); //calling its Draw
 
         ScanPatterns(_wrappedTerrain.Field);
     }
@@ -53,6 +53,13 @@ internal class ScannerTerrainDecorator : ITerrain
     public void StablePatternEncountered(List<Cell> pattern) =>
         _wrappedTerrain.StablePatternEncountered(pattern);
 
+    public void Draw()
+    {
+        foreach (Cell cell in Field.Where(cell => cell.State is Dead))
+            _cellClearer(cell);
+        foreach (Cell cell in Field.Where(cell => cell.State is not Dead))
+            DrawCell(cell);
+    }
     public void DrawCell(Cell cell) => //parent draw called in parent make turn
         _cellPainter(cell);
 
@@ -66,7 +73,7 @@ internal class ScannerTerrainDecorator : ITerrain
 
     private void ScanPatterns(CellField cells)
     {
-        foreach (Cell cell in Field) cell.ToDead();
+        foreach (Cell cell in Field) cell.State = new Dead(cell);
 
         for (int row = -1; row < Field.Height + 1; row++)
             for (int col = -1; col < Field.Width + 1; col++)
@@ -74,10 +81,7 @@ internal class ScannerTerrainDecorator : ITerrain
 
         AppendAllBlack();
 
-        foreach (Cell cell in Field.Where(cell => cell.State is Dead))
-            _cellClearer(cell);
-        foreach (Cell cell in Field.Where(cell => cell.State is not Dead))
-            DrawCell(cell);
+        Draw();
 
         return;
 
@@ -109,10 +113,10 @@ internal class ScannerTerrainDecorator : ITerrain
             foreach (Cell cell in cells)
             {
                 if (cell.State is not Black) continue;
-                Field[cell.X, cell.Y].ToBlack();
+                var fcell = Field[cell.X, cell.Y];
+                fcell.State = new Black(fcell);
             }
         }
     }
 
-    public void Draw() => _wrappedTerrain.Draw();
 }

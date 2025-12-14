@@ -18,8 +18,8 @@ public class Cell
     {
         X = x;
         Y = y;
-        State = new Dead();
-        _nextState = new Dead();
+        State = new Dead(this);
+        _nextState = new Dead(this);
     }
 
     // Equals to col, row indexes in CellField
@@ -30,32 +30,22 @@ public class Cell
 
     public CellState State { get; set; }
 
-    private int WhitesNearby => _neighbours.Where(cell => cell.State is White).Count();
-    private int BlackNearby => _neighbours.Where(cell => cell.State is Black).Count();
 
-    public void CalculateNextState() =>
-        _nextState = State.NextState(_neighbours, BlackNearby, WhitesNearby);
+    public void CalculateNextState()
+    {
+        if (State.NextState == null) throw new NullReferenceException($"{State.NextState?.GetType()}'s logic is not implemented.");
+        _nextState = State.NextState(this);
+    }
     
 
     public void ToNextState()
     {
         if (State.GetType() == _nextState.GetType()) return;
 
-        if (State is White && _nextState is Black)        
-            State.Colony?.Join(this);
-        
-
-        if (State is Black && _nextState is not Black)
-            CellColony.GetColony(this).Item2?.Leave(this);
-
-       State = _nextState;
+        State = _nextState;
     }
 
     public void AddNeighbour(Cell neighbour) => _neighbours.Add(neighbour);
-
-    public void ToDead() => State = new Dead();
-    public void ToWhite() => State = new White();
-    public void ToBlack(CellColony? colony = null) => State = new Black(colony);
 
     public IImmutableSolidColorBrush BrushToPaintCell() => State.BrushToPaintCell();
 
@@ -67,8 +57,6 @@ public class Cell
         return goingInto?.State is not Border;
     }
 
-    public override string ToString()
-    {
-        return $"{X}, {Y}, State {State.GetType().Name}";
-    }
+    public override string ToString() =>
+        $"{X}, {Y}, State {State.GetType().Name}";
 }

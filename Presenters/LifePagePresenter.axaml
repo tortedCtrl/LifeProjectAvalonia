@@ -22,7 +22,7 @@
 				Background="Green"/>
 
 		<CheckBox x:Name="FramedCellsButton"
-                Margin="200,20"
+                Margin="30,5"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
 				IsChecked ="True"/>

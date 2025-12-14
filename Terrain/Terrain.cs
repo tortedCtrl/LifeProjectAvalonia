@@ -32,6 +32,9 @@ public class Terrain : ITerrain
         foreach (Cell cell in Field)
             cell.ToNextState();
 
+        foreach (Cell cell in Field)
+            cell.State.OnStateChanged();
+
         Draw();
     }
 
@@ -39,7 +42,7 @@ public class Terrain : ITerrain
     {
         foreach (Cell cell in Field)
             if (Random.Shared.Next(7) == 0)
-                cell.ToWhite();
+                cell.State = new White(cell);
 
         foreach (Cell cell in Field.Where(cell => cell.State is Dead))
             _cellClearer(cell);
@@ -54,7 +57,6 @@ public class Terrain : ITerrain
             _cellClearer(cell);
         foreach (Cell cell in Field.Where(cell => cell.State is not Dead))
             DrawCell(cell);
-    
     }
     public void DrawCell(Cell cell) =>
         _cellPainter?.Invoke(cell);

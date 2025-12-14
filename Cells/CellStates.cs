@@ -1,80 +1,88 @@
 ﻿using Avalonia.Media;
 using System.Linq;
 using System.Collections.Generic;
+using System;
 
 namespace LifeProjectAvalonia;
-public interface CellState
+
+public abstract class CellState
 {
-    public CellColony? Colony { get; }
-    public CellState NextState(List<Cell> nbors, int blackNear, int whiteNear);
-    public IImmutableSolidColorBrush BrushToPaintCell();
+    protected Cell _related;
+    public CellState(Cell related) => _related = related;
+    public abstract Func<Cell, CellState>? NextState { get; protected set; }
+    public virtual void OnStateChanged() { }
+    public abstract IImmutableSolidColorBrush BrushToPaintCell();
 
 }
-public struct Dead : CellState
+public class Dead : CellState
 {
-    public CellColony? Colony { get => null; }
+    public Dead(Cell related) : base(related) { }
 
-    public CellState NextState(List<Cell> nbors, int blackNear, int whiteNear)
+    private static Func<Cell, CellState>? _nextState;
+
+    public override Func<Cell, CellState>? NextState { get => _nextState; protected set => _nextState = value; }
+
+    public static void InjectLogic(Func<Cell, CellState> logic) => _nextState = logic;
+
+    public override IImmutableSolidColorBrush BrushToPaintCell() => Brushes.LightBlue;
+
+}
+public class Border : CellState
+{
+    private static Func<Cell, CellState>? _nextState;
+
+    public Border(Cell related) : base(related)
     {
-        if (whiteNear == 3)
-            return new White();
-
-        return new Dead();
+        _related = related;
     }
-
-    public IImmutableSolidColorBrush BrushToPaintCell() => Brushes.LightBlue;
-}
-public struct White : CellState
-{
-    public CellColony? Colony { get; private set; }
-
-    public CellState NextState(List<Cell> nbors, int blackNear, int whiteNear)
+    public override Func<Cell, CellState>? NextState
     {
-        if (blackNear > whiteNear + 1)
+        get
         {
-            Cell? cell = nbors.FirstOrDefault(cell => cell.State is Black);
-            Colony = CellColony.GetColony(cell).Item2;
-            return new Black(Colony);
+            if (_nextState == null)
+                return (Cell related) => new Border(related);
+            else return _nextState;
         }
-
-        if (whiteNear == 2 || whiteNear == 3)
-            return new White();
-
-        return new Dead();
+        protected set => _nextState = value;
     }
 
-    public IImmutableSolidColorBrush BrushToPaintCell() => Brushes.White;
+    public override IImmutableSolidColorBrush BrushToPaintCell() => Brushes.Brown;
+
 }
-public struct Black : CellState
+
+public class White : CellState
 {
-    public CellColony? Colony { get; private set; }
+    public White(Cell related) : base(related) { }
 
-    public Black(CellColony? colony = null)
-    {
-        Colony = colony;
-    }
+    private static Func<Cell, CellState>? _nextState;
 
-    public CellState NextState(List<Cell> nbors, int blackNear, int whiteNear)
-    {
-        if (blackNear + 0 < whiteNear)
-            return new White();
+    public override Func<Cell, CellState>? NextState { get => _nextState; protected set => _nextState = value; }
 
-        if (blackNear == 2 || blackNear == 3 || blackNear == 4)
-            return new Black();
+    public static void InjectLogic(Func<Cell, CellState> logic) => _nextState = logic;
 
-        return new Dead();
-    }
 
-    public IImmutableSolidColorBrush BrushToPaintCell() => Brushes.Black;
+    public override IImmutableSolidColorBrush BrushToPaintCell() => Brushes.White;
+
 }
-public struct Border : CellState
+public class Black : CellState
 {
-    public CellColony? Colony => null;
-
-    public CellState NextState(List<Cell> nbors, int blackNear, int whiteNear)
+    private CellColony? _colony;
+    public Black(Cell related, CellColony? colony = null) : base(related)
     {
-        return new Border();
+        _colony = colony;
+    }
+    private static Func<Cell, CellState>? _nextState;
+
+    public override Func<Cell, CellState>? NextState { get => _nextState; protected set => _nextState = value; }
+
+    public static void InjectLogic(Func<Cell, CellState> logic) => _nextState = logic;
+
+
+    public override void OnStateChanged()
+    {
+        _colony?.Join(_related);
     }
 
-    public IImmutableSolidColorBrush BrushToPaintCell() => Brushes.Brown;
+    public override IImmutableSolidColorBrush BrushToPaintCell() => Brushes.Black;
 }
+

@@ -32,7 +32,7 @@ public class CellField : IEnumerable<Cell>
                 {
                     cells[col, row] = new Cell(col - 1, row - 1);
                     if (col == 0 || col == Width + 1 || row == 0 || row == Height + 1)
-                        cells[col, row].State = new Border();
+                        cells[col, row].State = new Border(cells[col, row]);
                 }
             return cells;
         }

@@ -38,6 +38,8 @@ internal class ScannerTerrainDecorator : TerrainDecorator
         _wrappedTerrain.MakeTurn(); //calling its Draw
 
         ScanPatterns(_wrappedTerrain.Field);
+
+        Draw();
     }
 
     public override void Randomize()
@@ -45,6 +47,8 @@ internal class ScannerTerrainDecorator : TerrainDecorator
         _wrappedTerrain.Randomize();
 
         ScanPatterns(_wrappedTerrain.Field);
+
+        Draw();
     }
 
     public override void Draw()
@@ -54,7 +58,9 @@ internal class ScannerTerrainDecorator : TerrainDecorator
         foreach (Cell cell in Field.Where(cell => cell.State is not Dead))
             DrawCell(cell);
     }
-
+    
+    public override void DrawCell(Cell cell) =>
+        _cellPainter(cell);
 
     private void ScanPatterns(CellField cells)
     {
@@ -66,7 +72,6 @@ internal class ScannerTerrainDecorator : TerrainDecorator
 
         AppendAllBlack();
 
-        Draw();
 
         return;
 

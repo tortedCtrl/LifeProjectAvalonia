@@ -75,7 +75,7 @@ public class ClassicGameFactory : GameFactory
         if (_terrain is TerrainDecorator decorator)
         {
             if (show == false)
-                Console.WriteLine(decorator.SetWrappedTerrain(_statistics2));
+                decorator.SetWrappedTerrain(_statistics2);
             else
                 decorator.SetWrappedTerrain(new FramedCellsTerrainDecorator(_statistics2));
         }

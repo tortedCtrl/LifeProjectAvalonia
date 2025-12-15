@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace LifeProjectAvalonia;
 
@@ -21,8 +18,6 @@ public class Terrain : ITerrain
         _cellPainter = fieldPainter != null ? fieldPainter : throw new NullReferenceException(nameof(fieldPainter));
         _cellClearer = fieldClearer != null ? fieldClearer : throw new NullReferenceException(nameof(fieldClearer));
     }
-
-    public ITerrain? SetWrappedTerrain(ITerrain newWrappedTerrain) { return null; }
 
     public void MakeTurn()
     {

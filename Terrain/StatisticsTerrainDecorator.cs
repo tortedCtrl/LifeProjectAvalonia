@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LifeProjectAvalonia;
 
-public class StatisticsTerrainDecorator : ITerrain
+public class StatisticsTerrainDecorator : TerrainDecorator
 {
-    private ITerrain _wrappedTerrain;
     private LifePagePresenter _presenter;
     private Action<TimeSpan>? _timePresenter;
 
@@ -16,11 +13,8 @@ public class StatisticsTerrainDecorator : ITerrain
     private bool _statAll;
 
     public StatisticsTerrainDecorator(ITerrain wrappingTerrain, LifePagePresenter presenter,
-                                      Action<TimeSpan>? timePresenter, bool statAll = true)
+                                      Action<TimeSpan>? timePresenter, bool statAll = true) : base(wrappingTerrain)
     {
-        _wrappedTerrain = wrappingTerrain != null ? wrappingTerrain :
-            throw new NullReferenceException(nameof(wrappingTerrain));
-
         _presenter = presenter != null ? presenter :
             throw new NullReferenceException(nameof(presenter));
 
@@ -29,13 +23,7 @@ public class StatisticsTerrainDecorator : ITerrain
         _statAll = statAll;
     }
 
-    public CellField Field => _wrappedTerrain.Field;
-
-    public void Draw() => _wrappedTerrain.Draw();
-
-    public void DrawCell(Cell cell) => _wrappedTerrain.DrawCell(cell);
-
-    public void MakeTurn()
+    public override void MakeTurn()
     {
         TimeSpan turnTime = DateTime.Now.TimeOfDay;
 
@@ -44,25 +32,13 @@ public class StatisticsTerrainDecorator : ITerrain
         _generation++;
         if (_statAll)
         {
-            int deadCells = Field.Where(cell => cell.State is Dead).Count();
-            int whiteCells = Field.Where(cell => cell.State is White).Count();
-            int blackCells = Field.Where(cell => cell.State is Black).Count();
+            int deadCells = Field.Count(cell => cell.State is Dead);
+            int whiteCells = Field.Count(cell => cell.State is White);
+            int blackCells = Field.Count(cell => cell.State is Black);
             _presenter.UpdateStatistics(_generation, whiteCells, blackCells, deadCells);
         }
 
         turnTime = DateTime.Now.TimeOfDay - turnTime;
         _timePresenter?.Invoke(turnTime);
     }
-
-
-    public void Randomize() => _wrappedTerrain.Randomize();
-
-    public ITerrain SetWrappedTerrain(ITerrain newWrappedTerrain)
-    {
-        var prev = _wrappedTerrain;
-        _wrappedTerrain = newWrappedTerrain;
-        return prev;
-    }
-
-    public void StablePatternEncountered(List<Cell> pattern) => _wrappedTerrain.StablePatternEncountered(pattern);
 }

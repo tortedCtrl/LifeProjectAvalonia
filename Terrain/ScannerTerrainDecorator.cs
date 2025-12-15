@@ -4,18 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 namespace LifeProjectAvalonia;
 
-internal class ScannerTerrainDecorator : ITerrain
+internal class ScannerTerrainDecorator : TerrainDecorator
 {
+    private readonly CellField _scanningField;
+    private readonly Pattern[] patterns = { new SquarePattern(), new LightPattern(), new GliderPattern(), new HivePattern() };
+
     private Action<Cell> _cellClearer;
     private Action<Cell> _cellPainter;
-    private ITerrain _wrappedTerrain;
 
-
-    public ScannerTerrainDecorator(ITerrain terrain, StartData data, Action<bool>? showEmptyCells)
+    public ScannerTerrainDecorator(ITerrain terrain, StartData data, Action<bool>? showEmptyCells) : base(terrain)
     {
-        _wrappedTerrain = terrain != null ? terrain : throw new NullReferenceException(nameof(terrain));
-
-        Field = new(terrain.Field.Width, terrain.Field.Height);
+        _scanningField = new(terrain.Field.Width, terrain.Field.Height);
 
         var favortites = CreateWindow();
 
@@ -32,42 +31,28 @@ internal class ScannerTerrainDecorator : ITerrain
         }
     }
 
-    public CellField Field { get; init; }
+    public override CellField Field { get => _scanningField; }
 
-    private readonly Pattern[] patterns = { new SquarePattern(), new LightPattern(), new GliderPattern(), new HivePattern() };
-
-    public void MakeTurn()
+    public override void MakeTurn()
     {
         _wrappedTerrain.MakeTurn(); //calling its Draw
 
         ScanPatterns(_wrappedTerrain.Field);
     }
 
-    public void Randomize()
+    public override void Randomize()
     {
         _wrappedTerrain.Randomize();
 
         ScanPatterns(_wrappedTerrain.Field);
     }
 
-    public void StablePatternEncountered(List<Cell> pattern) =>
-        _wrappedTerrain.StablePatternEncountered(pattern);
-
-    public void Draw()
+    public override void Draw()
     {
         foreach (Cell cell in Field.Where(cell => cell.State is Dead))
             _cellClearer(cell);
         foreach (Cell cell in Field.Where(cell => cell.State is not Dead))
             DrawCell(cell);
-    }
-    public void DrawCell(Cell cell) => //parent draw called in parent make turn
-        _cellPainter(cell);
-
-    public ITerrain SetWrappedTerrain(ITerrain newWrappedTerrain)
-    {
-        var prev = _wrappedTerrain;
-        _wrappedTerrain = newWrappedTerrain;
-        return prev;
     }
 
 
@@ -84,7 +69,6 @@ internal class ScannerTerrainDecorator : ITerrain
         Draw();
 
         return;
-
 
         void ScanPatternsFromCorner(int x, int y)
         {
@@ -118,5 +102,4 @@ internal class ScannerTerrainDecorator : ITerrain
             }
         }
     }
-
 }

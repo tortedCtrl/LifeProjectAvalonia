@@ -5,11 +5,11 @@ namespace LifeProjectAvalonia;
 
 public class ColoniesGameFactory : GameFactory
 {
-    private ITerrain? _statistics1;
-    private ITerrain? _scanner;
-    private ITerrain? _statistics2;
+    private TerrainDecorator? _statistics1;
+    private TerrainDecorator? _scanner;
+    private TerrainDecorator? _statistics2;
 
-    public ColoniesGameFactory(StartData windowData, LifePagePresenter presenter) 
+    public ColoniesGameFactory(StartData windowData, LifePagePresenter presenter)
         : base(windowData, presenter)
     {
     }
@@ -24,7 +24,7 @@ public class ColoniesGameFactory : GameFactory
 
         return _terrain;
 
-        (ITerrain, ITerrain, ITerrain) WrapTerrain()
+        (TerrainDecorator, TerrainDecorator, TerrainDecorator) WrapTerrain()
         {
             _terrain = new ColoniesTerrainDecorator(_terrain); //Дополнительно оборачивает декоратором с колониями
             _statistics1 = new StatisticsTerrainDecorator(_terrain, _presenter, _presenter.UpdateTurnTime);
@@ -44,7 +44,7 @@ public class ColoniesGameFactory : GameFactory
 
     public CellState DeadLogic(Cell related)
     {
-        int whiteNear = related.Neighbours.Where(cell => cell.State is White).Count();
+        int whiteNear = related.Neighbours.Count(cell => cell.State is White);
         if (whiteNear == 3)
             return new White(related);
 
@@ -52,8 +52,8 @@ public class ColoniesGameFactory : GameFactory
     }
     public CellState WhiteLogic(Cell related)
     {
-        int whiteNear = related.Neighbours.Where(cell => cell.State is White).Count();
-        int blackNear = related.Neighbours.Where(cell => cell.State is Black).Count();
+        int whiteNear = related.Neighbours.Count(cell => cell.State is White);
+        int blackNear = related.Neighbours.Count(cell => cell.State is Black);
         if (blackNear > whiteNear + 1)
         {
             Cell? cell = related.Neighbours.FirstOrDefault(cell => cell.State is Black);
@@ -67,8 +67,8 @@ public class ColoniesGameFactory : GameFactory
     }
     public CellState BlackLogic(Cell related)
     {
-        int whiteNear = related.Neighbours.Where(cell => cell.State is White).Count();
-        int blackNear = related.Neighbours.Where(cell => cell.State is Black).Count();
+        int whiteNear = related.Neighbours.Count(cell => cell.State is White);
+        int blackNear = related.Neighbours.Count(cell => cell.State is Black);
         if (blackNear + 0 < whiteNear)
             return new White(related);
 
@@ -83,10 +83,13 @@ public class ColoniesGameFactory : GameFactory
     {
         if (_statistics2 == null) throw new NullReferenceException(nameof(_statistics2));
 
-        if (show == false)
-            _terrain!.SetWrappedTerrain(_statistics2!);
-        else
-            _terrain!.SetWrappedTerrain(new FramedCellsTerrainDecorator(_statistics2!));
+        if (_terrain is TerrainDecorator decorator)
+        {
+            if (show == false)
+                decorator.SetWrappedTerrain(_statistics2!);
+            else
+                decorator.SetWrappedTerrain(new FramedCellsTerrainDecorator(_statistics2!));
+        }
     }
 
     public override void ShowEmptyCells_LifePresenter(bool show)

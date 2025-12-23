@@ -52,6 +52,7 @@ public partial class MainWindow : Window
         void InitController()
         {
             GameFactory factory;
+            
             switch (GameMode.SelectedIndex)
             {
                 case 0:

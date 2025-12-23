@@ -78,7 +78,6 @@ public class ColoniesGameFactory : GameFactory
         return new Dead(related);
     }
 
-
     public override void ShowEmptyCells_FavoritesPresenter(bool show)
     {
         if (_statistics2 == null) throw new NullReferenceException(nameof(_statistics2));

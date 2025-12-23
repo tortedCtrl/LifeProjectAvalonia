@@ -8,20 +8,20 @@ public class FramedCellsTerrainDecorator : TerrainDecorator
 
     public override void MakeTurn()
     {
-        _wrappedTerrain.MakeTurn();
+        base.MakeTurn();
         foreach (Cell cell in Field.Where(cell => cell.State is Dead))
             DrawCell(cell);
     }
 
     public override void Draw()
     {
-        _wrappedTerrain.Draw();
+        base.Draw();
         foreach (Cell cell in Field.Where(cell => cell.State is Dead))
             DrawCell(cell);
     }
     public override void Randomize()
     {
-        _wrappedTerrain.Randomize();
+        base.Randomize();
         foreach (Cell cell in Field)
             DrawCell(cell);
     }

@@ -23,7 +23,7 @@ public class ColoniesTerrainDecorator : TerrainDecorator
 
         colonies.ForEach(colony => colony.TryMove());
 
-        _wrappedTerrain.Draw();
+        base.Draw();
     }
 
     public override void StablePatternEncountered(List<Cell> stablePattern)
@@ -55,7 +55,7 @@ public class ColoniesTerrainDecorator : TerrainDecorator
     }
     private void Unite(CellColony? A, CellColony? B)
     {
-        if (A == null || B == null)
+        if (A == null || B == null || A == B)
             return;
 
         colonies.Add(A + B);

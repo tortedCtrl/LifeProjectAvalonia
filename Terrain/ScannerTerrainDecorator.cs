@@ -35,18 +35,18 @@ internal class ScannerTerrainDecorator : TerrainDecorator
 
     public override void MakeTurn()
     {
-        _wrappedTerrain.MakeTurn(); //calling its Draw
+        base.MakeTurn(); //calling its Draw
 
-        ScanPatterns(_wrappedTerrain.Field);
+        ScanPatterns(base.Field);
 
         Draw();
     }
 
     public override void Randomize()
     {
-        _wrappedTerrain.Randomize();
+        base.Randomize();
 
-        ScanPatterns(_wrappedTerrain.Field);
+        ScanPatterns(base.Field);
 
         Draw();
     }
@@ -85,7 +85,7 @@ internal class ScannerTerrainDecorator : TerrainDecorator
 
                 Revive(aliveCells!);
 
-                if (pattern.Stable) _wrappedTerrain.StablePatternEncountered(aliveCells!);
+                if (pattern.Stable) base.StablePatternEncountered(aliveCells!);
 
                 return;
             }

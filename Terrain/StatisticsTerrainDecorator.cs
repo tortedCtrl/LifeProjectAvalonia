@@ -26,7 +26,7 @@ public class StatisticsTerrainDecorator : TerrainDecorator
     {
         TimeSpan turnTime = DateTime.Now.TimeOfDay;
 
-        _wrappedTerrain.MakeTurn();
+        base.MakeTurn();
 
         _generation++;
         if (_statAll)

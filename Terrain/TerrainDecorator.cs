@@ -5,7 +5,7 @@ namespace LifeProjectAvalonia;
 
 public abstract class TerrainDecorator : ITerrain
 {
-    protected ITerrain _wrappedTerrain;
+    private ITerrain _wrappedTerrain;
 
     public TerrainDecorator(ITerrain wrappingEntity)
     {
@@ -21,10 +21,10 @@ public abstract class TerrainDecorator : ITerrain
     public virtual void DrawCell(Cell cell) => _wrappedTerrain.DrawCell(cell);
     public virtual void StablePatternEncountered(List<Cell> pattern) => _wrappedTerrain.StablePatternEncountered(pattern);
 
-    public ITerrain SetWrappedTerrain(ITerrain newWrappedTerrain)
+    public ITerrain SetWrappedDecorator(ITerrain newWrappedTerrain)
     {
         ITerrain previousTerrain = _wrappedTerrain;
         _wrappedTerrain = newWrappedTerrain;
         return previousTerrain;
-    }
+    }    
 }

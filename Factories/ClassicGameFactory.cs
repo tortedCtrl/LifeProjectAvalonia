@@ -40,7 +40,7 @@ public class ClassicGameFactory : GameFactory
         }
     }
 
-    public CellState DeadLogic(Cell related)
+    private CellState DeadLogic(Cell related)
     {
         int whiteNear = related.Neighbours.Count(cell => cell.State is White);
         if (whiteNear == 3)
@@ -48,7 +48,7 @@ public class ClassicGameFactory : GameFactory
 
         return new Dead(related);
     }
-    public CellState WhiteLogic(Cell related)
+    private CellState WhiteLogic(Cell related)
     {
         int whiteNear = related.Neighbours.Count(cell => cell.State is White);
         if (whiteNear == 2 || whiteNear == 3)
@@ -63,9 +63,9 @@ public class ClassicGameFactory : GameFactory
         if (_statistics1 == null) throw new NullReferenceException(nameof(_statistics1));
 
         if (show == false)
-            _scanner!.SetWrappedTerrain(_statistics1!);
+            _scanner!.SetWrappedDecorator(_statistics1!);
         else
-            _scanner!.SetWrappedTerrain(new FramedCellsTerrainDecorator(_statistics1!));
+            _scanner!.SetWrappedDecorator(new FramedCellsTerrainDecorator(_statistics1!));
     }
 
     public override void ShowEmptyCells_FavoritesPresenter(bool show)
@@ -75,9 +75,9 @@ public class ClassicGameFactory : GameFactory
         if (_terrain is TerrainDecorator decorator)
         {
             if (show == false)
-                decorator.SetWrappedTerrain(_statistics2);
+                decorator.SetWrappedDecorator(_statistics2);
             else
-                decorator.SetWrappedTerrain(new FramedCellsTerrainDecorator(_statistics2));
+                decorator.SetWrappedDecorator(new FramedCellsTerrainDecorator(_statistics2));
         }
         else
             throw new ArgumentException();
